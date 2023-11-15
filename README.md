@@ -1,0 +1,3 @@
+# ced
+
+Common, everyday stuff
