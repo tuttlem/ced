@@ -1,5 +1,5 @@
-#ifndef __ced_ds_list_h__
-#define __ced_ds_list_h__
+#ifndef __ced_cont_list_h__
+#define __ced_cont_list_h__
 
 #include <assert.h>
 #include <stddef.h>
@@ -142,4 +142,4 @@ void ced_list_remove(ced_list_p list, ced_data_cmp cmp, void *data);
  */
 void ced_list_head(ced_list_p list, void **data, ced_list_p *rest);
 
-#endif /* __ced_ds_list_h__ */
+#endif /* __ced_cont_list_h__ */

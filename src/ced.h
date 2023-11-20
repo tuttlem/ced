@@ -6,8 +6,13 @@
 extern "C" {
 #endif
 
+#include "./util/log.h"
+
 #include "./cont/types.h"
 #include "./cont/list.h"
+#include "./cont/stack.h"
+#include "./cont/queue.h"
+#include "./cont/btree.h"
 
 #ifdef __cplusplus
 }

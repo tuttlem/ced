@@ -181,7 +181,7 @@ ced_list_node_p ced_list_find(ced_list_p list, ced_data_cmp cmp, void *data) {
 
     ced_list_node_p node;
     ced_list_foreach(node, list) {
-        if (_cmp(node->data, data)) {
+        if (_cmp(node->data, data) == 0) {
             return node;
         }
     }
