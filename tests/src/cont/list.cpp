@@ -13,7 +13,6 @@ namespace {
     }
     TEST(ListTests, AppendFiveThings) {
         ced_list_p list = ced_list_new();
-        list->managed_data = 0;
 
         ced_list_append(list, (void *)1);
         ced_list_append(list, (void *)2);
@@ -27,7 +26,6 @@ namespace {
     }
     TEST(ListTests, PrependSevenThings) {
         ced_list_p list = ced_list_new();
-        list->managed_data = 0;
 
         ced_list_prepend(list, (void *)1);
         ced_list_prepend(list, (void *)2);
@@ -43,7 +41,6 @@ namespace {
     }
     TEST(ListTests, FindTheThree) {
         ced_list_p list = ced_list_new();
-        list->managed_data = 0;
 
         ced_list_append(list, (void *)1);
         ced_list_append(list, (void *)2);
@@ -58,7 +55,6 @@ namespace {
     }
     TEST(ListTests, RemoveTheThree) {
         ced_list_p list = ced_list_new();
-        list->managed_data = 0;
 
         ced_list_append(list, (void *)1);
         ced_list_append(list, (void *)2);
@@ -77,7 +73,6 @@ namespace {
     }
     TEST(ListTests, FindTheName) {
         ced_list_p list = ced_list_new();
-        list->managed_data = 0;
 
         ced_list_append(list, (void *)"Michael");
         ced_list_append(list, (void *)"John");
@@ -92,7 +87,6 @@ namespace {
     }
     TEST(ListTests, EnumeratesForward) {
         ced_list_p list = ced_list_new();
-        list->managed_data = 0;
 
         ced_list_append(list, (void *)1);
         ced_list_append(list, (void *)2);
@@ -111,7 +105,6 @@ namespace {
     }
     TEST(ListTests, EnumeratesInReverse) {
         ced_list_p list = ced_list_new();
-        list->managed_data = 0;
 
         ced_list_append(list, (void *)1);
         ced_list_append(list, (void *)2);
@@ -130,7 +123,6 @@ namespace {
     }
     TEST(ListTests, HeadAndRest) {
         ced_list_p list = ced_list_new();
-        list->managed_data = 0;
 
         ced_list_append(list, (void *)1);
         ced_list_append(list, (void *)2);
@@ -149,7 +141,6 @@ namespace {
     }
     TEST(ListTests, EnumerateWithHeadAndRest) {
         ced_list_p list = ced_list_new();
-        list->managed_data = 0;
 
         int i = 1;
 
@@ -229,5 +220,28 @@ namespace {
 
         ced_list_free(list);
     }
+    TEST(ListTests, SortsValues) {
+        ced_list_p list = ced_list_new();
 
+        ced_list_append(list, (void*)5);
+        ced_list_append(list, (void*)3);
+        ced_list_append(list, (void*)1);
+        ced_list_append(list, (void*)4);
+        ced_list_append(list, (void*)2);
+
+        ced_list_sort(list, NULL);
+
+        void *value = ced_list_get(list, 0);
+        EXPECT_EQ(value, (void *) 1);
+        value = ced_list_get(list, 1);
+        EXPECT_EQ(value, (void *) 2);
+        value = ced_list_get(list, 2);
+        EXPECT_EQ(value, (void *) 3);
+        value = ced_list_get(list, 3);
+        EXPECT_EQ(value, (void *) 4);
+        value = ced_list_get(list, 4);
+        EXPECT_EQ(value, (void *) 5);
+
+        ced_list_free(list);
+    }
 }

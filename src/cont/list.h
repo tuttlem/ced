@@ -142,4 +142,11 @@ void ced_list_remove(ced_list_p list, ced_data_cmp cmp, void *data);
  */
 void ced_list_head(ced_list_p list, void **data, ced_list_p *rest);
 
+/**
+ * @brief Performs a merge sort on a list and returns the result
+ * @param list The list to sort
+ * @param cmp The comparator function to use
+ */
+void ced_list_sort(ced_list_p list, ced_data_cmp cmp);
+
 #endif /* __ced_cont_list_h__ */

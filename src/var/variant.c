@@ -264,7 +264,8 @@ ced_var_p ced_var_as_type(ced_var_p var, ced_var_type_t type) {
             new_var->data._pointer = var->data._pointer;
             break;
         default:
-            assert(NULL);
+            new_var->type = ced_var_type_null;
+            break;
     }
 
     return new_var;

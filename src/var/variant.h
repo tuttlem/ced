@@ -25,6 +25,7 @@ typedef enum {
 
 static size_t ced_var_type_sizes[14];
 
+#define ced_var_type_is_null(type)      (type == ced_var_type_null)
 #define ced_var_type_is_int(type)       (type >= ced_var_type_int8 && type <= ced_var_type_bool)
 #define ced_var_type_is_decimal(type)   (type >= ced_var_type_float && type <= ced_var_type_double)
 #define ced_var_type_is_string(type)    (type == ced_var_type_string)

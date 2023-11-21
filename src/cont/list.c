@@ -237,3 +237,68 @@ void ced_list_head(ced_list_p list, void **data, ced_list_p *rest) {
 
     *rest = new_list;
 }
+
+ced_list_node_p _ced_list_merge(ced_list_node_p left, ced_list_node_p right, ced_data_cmp cmp) {
+    ced_list_node_p result = NULL;
+
+    if (left == NULL) {
+        return right;
+    } else if (right == NULL) {
+        return left;
+    }
+
+    if (cmp(left->data, right->data) <= 0) {
+        result = left;
+        result->next = _ced_list_merge(left->next, right, cmp);
+    } else {
+        result = right;
+        result->next = _ced_list_merge(left, right->next, cmp);
+    }
+
+    return result;
+}
+
+void _ced_list_split(ced_list_node_p source, ced_list_node_p *left, ced_list_node_p *right) {
+    ced_list_node_p fast, slow;
+    slow = source;
+    fast = source->next;
+
+    while (fast != NULL) {
+        fast = fast->next;
+        if (fast != NULL) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+    }
+
+    *left = source;
+    *right = slow->next;
+    slow->next = NULL;
+}
+
+void _ced_list_merge_sort(ced_list_node_p *head, ced_data_cmp cmp) {
+    ced_list_node_p node = *head;
+    ced_list_node_p left, right;
+
+    if (node == NULL || node->next == NULL) {
+        return;
+    }
+
+    _ced_list_split(node, &left, &right);
+
+    _ced_list_merge_sort(&left, cmp);
+    _ced_list_merge_sort(&right, cmp);
+
+    *head = _ced_list_merge(left, right, cmp);
+}
+
+void ced_list_sort(ced_list_p list, ced_data_cmp cmp) {
+    assert(list != NULL);
+    ced_data_cmp _cmp = ced_data_cmp_default;
+
+    if (cmp != NULL) {
+        _cmp = cmp;
+    }
+
+    _ced_list_merge_sort(&list->head, _cmp);
+}
