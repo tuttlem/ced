@@ -9,6 +9,7 @@ add_library(ced
     src/cont/queue.c
     src/cont/btree.c
     src/cont/types.c
-    src/util/log.c)
+    src/util/log.c
+    src/var/variant.c)
 
 add_subdirectory(tests)

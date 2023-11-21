@@ -14,6 +14,8 @@ extern "C" {
 #include "./cont/queue.h"
 #include "./cont/btree.h"
 
+#include "./var/variant.h"
+
 #ifdef __cplusplus
 }
 #endif

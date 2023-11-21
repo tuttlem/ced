@@ -181,6 +181,8 @@ namespace {
 
         void *value = ced_list_get(list, 1);
         EXPECT_EQ(value, (void *) 2);
+
+        ced_list_free(list);
     }
     TEST(ListTests, SetSecondElement) {
         ced_list_p list = ced_list_new();
@@ -191,6 +193,8 @@ namespace {
         ced_list_set(list, 1, (void*)5);
         void *value = ced_list_get(list, 1);
         EXPECT_EQ(value, (void *) 5);
+
+        ced_list_free(list);
     }
     TEST(ListTests, InsertA5BeforeThe1Item) {
         ced_list_p list = ced_list_new();
@@ -205,9 +209,12 @@ namespace {
         value = ced_list_get(list, 2);
         EXPECT_EQ(value, (void *) 2);
         EXPECT_EQ(list->size, 4);
+
+        ced_list_free(list);
     }
     TEST(ListTests, InsertA5AfterThe1Item) {
         ced_list_p list = ced_list_new();
+
         ced_list_append(list, (void*)1);
         ced_list_append(list, (void*)2);
         ced_list_append(list, (void*)3);
@@ -219,6 +226,8 @@ namespace {
         value = ced_list_get(list, 3);
         EXPECT_EQ(value, (void *) 3);
         EXPECT_EQ(list->size, 4);
+
+        ced_list_free(list);
     }
 
 }

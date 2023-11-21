@@ -5,7 +5,7 @@ ced_list_p ced_list_new() {
     ced_list_p list = (ced_list_p)malloc(sizeof(ced_list_t));
     assert(list != NULL);
 
-    list->managed_data = 1;
+    list->managed_data = 0;
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;

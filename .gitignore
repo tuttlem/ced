@@ -81,7 +81,7 @@ cmake-build-*
 
 # Ignore CI build directory
 build/
-xcuserdata
+xcuserdataW
 cmake-build-debug/
 .idea/
 bazel-bin
