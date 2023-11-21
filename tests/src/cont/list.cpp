@@ -220,6 +220,12 @@ namespace {
 
         ced_list_free(list);
     }
+    TEST(ListTests, SortsAnEmptyList) {
+        ced_list_p list = ced_list_new();
+        ced_list_sort(list, NULL);
+        EXPECT_EQ(list->size, 0);
+        ced_list_free(list);
+    }
     TEST(ListTests, SortsValues) {
         ced_list_p list = ced_list_new();
 
