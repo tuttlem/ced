@@ -13,6 +13,7 @@ extern "C" {
 #include "./cont/stack.h"
 #include "./cont/queue.h"
 #include "./cont/btree.h"
+#include "./cont/graph.h"
 
 #include "./var/variant.h"
 
