@@ -9,12 +9,16 @@
 #include "types.h"
 
 typedef struct ced_stack_node_t {
+    CED_REFLECT_INFO
+
     struct ced_stack_node_t *next;
 
     void *data;
 } ced_stack_node_t, *ced_stack_node_p;
 
 typedef struct ced_stack_t {
+    CED_REFLECT_INFO
+
     ced_stack_node_t *head;
 
     size_t size;

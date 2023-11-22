@@ -9,6 +9,7 @@ ced_stack_p ced_stack_new() {
     ced_stack_p stack = malloc(sizeof(ced_stack_t));
     assert(stack != NULL);
 
+    ced_reflect_set_info(stack, reflect_type_stack);
     stack->head = NULL;
     stack->size = 0;
 
@@ -38,6 +39,7 @@ void ced_stack_push(ced_stack_p stack, void *data) {
     ced_stack_node_p node = malloc(sizeof(ced_stack_node_t));
     assert(node != NULL);
 
+    ced_reflect_set_info(node, reflect_type_stack_node);
     node->data = data;
     node->next = stack->head;
 

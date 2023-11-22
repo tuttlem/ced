@@ -5,6 +5,7 @@ ced_list_p ced_list_new() {
     ced_list_p list = (ced_list_p)malloc(sizeof(ced_list_t));
     assert(list != NULL);
 
+    ced_reflect_set_info(list, reflect_type_list);
     list->managed_data = 0;
     list->head = NULL;
     list->tail = NULL;
@@ -29,6 +30,7 @@ ced_list_node_p ced_list_node_new() {
     ced_list_node_p node = (ced_list_node_p)malloc(sizeof(ced_list_node_t));
     assert(node != NULL);
 
+    ced_reflect_set_info(node, reflect_type_list_node);
     node->next = NULL;
     node->prev = NULL;
     node->data = NULL;

@@ -10,6 +10,8 @@
 #include "types.h"
 
 typedef struct ced_btree_node_t {
+    CED_REFLECT_INFO
+
     struct ced_btree_node_t *left;
     struct ced_btree_node_t *right;
 
@@ -18,6 +20,8 @@ typedef struct ced_btree_node_t {
 } ced_btree_node_t, *ced_btree_node_p;
 
 typedef struct ced_btree_t {
+    CED_REFLECT_INFO
+
     ced_btree_node_p root;
 
     ced_data_cmp cmp;

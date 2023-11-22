@@ -9,12 +9,16 @@
 #include "types.h"
 
 typedef struct ced_queue_node_t {
+    CED_REFLECT_INFO
+
     struct ced_queue_node_t *next;
 
     void *data;
 } ced_queue_node_t, *ced_queue_node_p;
 
 typedef struct ced_queue_t {
+    CED_REFLECT_INFO
+
     ced_queue_node_p head;
     ced_queue_node_p tail;
 

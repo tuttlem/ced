@@ -9,6 +9,8 @@ ced_graph_p ced_graph_new() {
     ced_graph_p graph = malloc(sizeof(ced_graph_t));
     assert(graph != NULL);
 
+    ced_reflect_set_info(graph, reflect_type_graph);
+
     graph->nodes = ced_list_new();
     graph->nodes->managed_data = 1;
 
@@ -43,6 +45,7 @@ ced_graph_node_p ced_graph_add_node(ced_graph_p graph, void *data) {
     ced_graph_node_p node = malloc(sizeof(ced_graph_node_t));
     assert(node != NULL);
 
+    ced_reflect_set_info(node, reflect_type_graph_node);
     node->data = data;
 
     ced_list_append(graph->nodes, node);
@@ -63,6 +66,7 @@ ced_graph_edge_p ced_graph_add_edge(ced_graph_p graph, ced_graph_node_p from, ce
     ced_graph_edge_p edge = malloc(sizeof(ced_graph_edge_t));
     assert(edge != NULL);
 
+    ced_reflect_set_info(edge, reflect_type_graph_edge);
     edge->from = from;
     edge->to = to;
     edge->data = data;

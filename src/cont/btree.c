@@ -9,6 +9,7 @@ ced_btree_p ced_btree_new(ced_data_cmp cmp) {
     ced_btree_p tree = malloc(sizeof(ced_btree_t));
     assert(tree != NULL);
 
+    ced_reflect_set_info(tree, reflect_type_btree);
     tree->root = NULL;
 
     if (cmp == NULL) {
@@ -46,9 +47,10 @@ ced_btree_node_p ced_btree_node_new() {
     ced_btree_node_p node = malloc(sizeof(ced_btree_node_t));
     assert(node != NULL);
 
+    ced_reflect_set_info(node, reflect_type_btree_node);
+
     node->left = NULL;
     node->right = NULL;
-
     node->key = NULL;
     node->data = NULL;
 

@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "../reflect.h"
+
 typedef enum {
     ced_var_type_null = 0,
     ced_var_type_int8 = 1,
@@ -33,7 +35,9 @@ static size_t ced_var_type_sizes[14];
 
 // Variant data structure
 typedef struct {
+    CED_REFLECT_INFO
     ced_var_type_t type;
+
     union {
         int8_t _int8;
         uint8_t _uint8;

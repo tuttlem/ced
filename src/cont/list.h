@@ -8,6 +8,8 @@
 #include "types.h"
 
 typedef struct ced_list_node_t {
+    CED_REFLECT_INFO
+
     struct ced_list_node_t *next;
     struct ced_list_node_t *prev;
 
@@ -15,6 +17,8 @@ typedef struct ced_list_node_t {
 } ced_list_node_t, *ced_list_node_p;
 
 typedef struct ced_list_t {
+    CED_REFLECT_INFO
+
     ced_list_node_t *head;
     ced_list_node_t *tail;
 

@@ -3,6 +3,8 @@
 
 #include <string.h>
 
+#include "../reflect.h"
+
 /**
  * @brief Generic pointer data comparator function type.
  */

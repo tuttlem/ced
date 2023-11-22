@@ -8,10 +8,14 @@
 #include "./list.h"
 
 typedef struct ced_graph_node_t {
+    CED_REFLECT_INFO
+
     void *data;
 } ced_graph_node_t, *ced_graph_node_p;
 
 typedef struct ced_graph_edge_t {
+    CED_REFLECT_INFO
+
     ced_graph_node_p from;
     ced_graph_node_p to;
 
@@ -19,6 +23,8 @@ typedef struct ced_graph_edge_t {
 } ced_graph_edge_t, *ced_graph_edge_p;
 
 typedef struct ced_graph_t {
+    CED_REFLECT_INFO
+
     ced_list_p nodes;
     ced_list_p edges;
 } ced_graph_t, *ced_graph_p;

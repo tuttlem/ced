@@ -8,6 +8,7 @@ ced_queue_p ced_queue_new() {
     ced_queue_p queue = malloc(sizeof(ced_queue_t));
     assert(queue != NULL);
 
+    ced_reflect_set_info(queue, reflect_type_queue);
     queue->head = NULL;
     queue->tail = NULL;
     queue->size = 0;
@@ -38,6 +39,7 @@ ced_queue_node_p ced_queue_node_new() {
     ced_queue_node_p node = malloc(sizeof(ced_queue_node_t));
     assert(node != NULL);
 
+    ced_reflect_set_info(node, reflect_type_queue_node);
     node->data = NULL;
     node->next = NULL;
 

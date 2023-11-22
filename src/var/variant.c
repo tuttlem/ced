@@ -25,6 +25,7 @@ static size_t ced_var_type_sizes[] = {
  */
 ced_var_p ced_var_new_int8(int8_t value) {
     ced_var_p var = malloc(sizeof(ced_var_t));
+    var->__info.type = reflect_type_variant;
     var->type = ced_var_type_int8;
     var->data._int8 = value;
 
@@ -38,6 +39,7 @@ ced_var_p ced_var_new_int8(int8_t value) {
  */
 ced_var_p ced_var_new_int16(int16_t value) {
     ced_var_p var = malloc(sizeof(ced_var_t));
+    var->__info.type = reflect_type_variant;
     var->type = ced_var_type_int16;
     var->data._int16 = value;
 
@@ -51,6 +53,7 @@ ced_var_p ced_var_new_int16(int16_t value) {
  */
 ced_var_p ced_var_new_int32(int32_t value) {
     ced_var_p var = malloc(sizeof(ced_var_t));
+    var->__info.type = reflect_type_variant;
     var->type = ced_var_type_int32;
     var->data._int32 = value;
 
@@ -64,6 +67,7 @@ ced_var_p ced_var_new_int32(int32_t value) {
  */
 ced_var_p ced_var_new_int64(int64_t value) {
     ced_var_p var = malloc(sizeof(ced_var_t));
+    var->__info.type = reflect_type_variant;
     var->type = ced_var_type_int64;
     var->data._int64 = value;
 
@@ -77,6 +81,7 @@ ced_var_p ced_var_new_int64(int64_t value) {
  */
 ced_var_p ced_var_new_uint8(uint8_t value) {
     ced_var_p var = malloc(sizeof(ced_var_t));
+    var->__info.type = reflect_type_variant;
     var->type = ced_var_type_uint8;
     var->data._uint8 = value;
 
@@ -90,6 +95,7 @@ ced_var_p ced_var_new_uint8(uint8_t value) {
  */
 ced_var_p ced_var_new_uint16(uint16_t value) {
     ced_var_p var = malloc(sizeof(ced_var_t));
+    var->__info.type = reflect_type_variant;
     var->type = ced_var_type_uint16;
     var->data._uint16 = value;
 
@@ -103,6 +109,7 @@ ced_var_p ced_var_new_uint16(uint16_t value) {
  */
 ced_var_p ced_var_new_uint32(uint32_t value) {
     ced_var_p var = malloc(sizeof(ced_var_t));
+    var->__info.type = reflect_type_variant;
     var->type = ced_var_type_uint32;
     var->data._uint32 = value;
 
@@ -116,6 +123,7 @@ ced_var_p ced_var_new_uint32(uint32_t value) {
  */
 ced_var_p ced_var_new_uint64(uint64_t value) {
     ced_var_p var = malloc(sizeof(ced_var_t));
+    var->__info.type = reflect_type_variant;
     var->type = ced_var_type_uint64;
     var->data._uint64 = value;
 
@@ -129,6 +137,7 @@ ced_var_p ced_var_new_uint64(uint64_t value) {
  */
 ced_var_p ced_var_new_bool(int value) {
     ced_var_p var = malloc(sizeof(ced_var_t));
+    var->__info.type = reflect_type_variant;
     var->type = ced_var_type_bool;
     var->data._bool = value;
 
@@ -142,6 +151,7 @@ ced_var_p ced_var_new_bool(int value) {
  */
 ced_var_p ced_var_new_float(float value) {
     ced_var_p var = malloc(sizeof(ced_var_t));
+    var->__info.type = reflect_type_variant;
     var->type = ced_var_type_float;
     var->data._float = value;
 
@@ -155,6 +165,7 @@ ced_var_p ced_var_new_float(float value) {
  */
 ced_var_p ced_var_new_double(double value) {
     ced_var_p var = malloc(sizeof(ced_var_t));
+    var->__info.type = reflect_type_variant;
     var->type = ced_var_type_double;
     var->data._double = value;
 
@@ -168,6 +179,7 @@ ced_var_p ced_var_new_double(double value) {
  */
 ced_var_p ced_var_new_string(const char* value) {
     ced_var_p var = malloc(sizeof(ced_var_t));
+    var->__info.type = reflect_type_variant;
     var->type = ced_var_type_string;
     var->data._string = strdup(value);
 
@@ -181,6 +193,7 @@ ced_var_p ced_var_new_string(const char* value) {
  */
 ced_var_p ced_var_new_pointer(void* value) {
     ced_var_p var = malloc(sizeof(ced_var_t));
+    var->__info.type = reflect_type_variant;
     var->type = ced_var_type_pointer;
     var->data._pointer = value;
 
@@ -221,6 +234,8 @@ ced_var_p ced_var_as_type(ced_var_p var, ced_var_type_t type) {
     }
 
     ced_var_p new_var = malloc(sizeof(ced_var_t));
+    ced_reflect_set_info(new_var, reflect_type_variant);
+
     new_var->type = type;
 
     switch (type) {
