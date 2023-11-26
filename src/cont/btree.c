@@ -190,6 +190,7 @@ void ced_btree_remove(ced_btree_p tree, void *key) {
         successor->left = current->left;
     }
 
+    free(current);
     tree->size--;
 }
 

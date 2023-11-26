@@ -2,17 +2,14 @@
 
 /**
  * @brief Creates a new hash table
- * @param size The size of the hash table
  * @return A pointer to the new hash table
  */
-ced_htable_p ced_htable_new(size_t size) {
+ced_htable_p ced_htable_new() {
     ced_htable_p htable = malloc(sizeof(ced_htable_t));
     assert(htable != NULL);
 
     ced_reflect_set_info(htable, reflect_type_htable);
 
-    htable->size = size;
-    htable->count = 0;
     htable->buckets = ced_btree_new(ced_data_cmp_int32);
 
     return htable;
@@ -29,15 +26,16 @@ void ced_htable_node_free(ced_btree_node_p node) {
     ced_htable_node_p hnode = node->data;
     free(hnode->key); /* the string */
     free(node->key); /* the hash */
-/*
+
     if (node->left != NULL) {
-        ced_btree_node_free(node->left);
+        ced_htable_node_free(node->left);
     }
 
     if (node->right != NULL) {
-        ced_btree_node_free(node->right);
+        ced_htable_node_free(node->right);
     }
-    */
+
+    free(hnode);
 }
 
 /**
@@ -76,7 +74,6 @@ void ced_htable_insert(ced_htable_p htable, char *key, void *value) {
     node->key = strdup(key);
     node->value = value;
 
-    htable->count ++;
     ced_btree_insert(htable->buckets, hash, node);
 }
 
@@ -91,7 +88,7 @@ void *ced_htable_get(ced_htable_p htable, char *key) {
     assert(key != NULL);
 
     uint32_t hash = ced_hash_fnv1a_str(key);
-    ced_htable_node_p node = (ced_htable_node_p *) ced_btree_get(htable->buckets, &hash);
+    ced_htable_node_p node = (ced_htable_node_p) ced_btree_get(htable->buckets, &hash);
 
     if (node != NULL) {
         return node->value;
@@ -110,19 +107,20 @@ void ced_htable_remove(ced_htable_p htable, char *key) {
     assert(key != NULL);
 
     uint32_t hash = ced_hash_fnv1a_str(key);
-    ced_btree_node_p node = ced_btree_get_node(htable->buckets, hash);
+    ced_btree_node_p node = ced_btree_get_node(htable->buckets, &hash);
+    ced_htable_node_p hnode = (ced_htable_node_p)node->data;
+    uint32_t *hash_ptr = (uint32_t*)node->key;
 
     if (node != NULL) {
-        ced_htable_node_p hnode = node->data;
-        uint32_t *hash = node->key;
-        char *key_str = hnode->key;
+        ced_btree_remove(htable->buckets, &hash);
+        // ced_htable_node_free(node);
 
-        ced_btree_remove(htable->buckets, hash);
+        if (hnode != NULL) {
+            free(hnode->key); /* the string */
+            free(hash_ptr); /* the hash */
 
-        free(key_str);
-        free(hash);
-
-        htable->count --;
+            free(hnode);
+        }
     }
 }
 
@@ -137,5 +135,5 @@ int ced_htable_contains(ced_htable_p htable, char *key) {
     assert(key != NULL);
 
     uint32_t hash = ced_hash_fnv1a_str(key);
-    return ced_btree_get(htable->buckets, hash) != NULL;
+    return ced_btree_get(htable->buckets, &hash) != NULL;
 }

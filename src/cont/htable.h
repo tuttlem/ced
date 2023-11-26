@@ -12,8 +12,6 @@ typedef struct ced_htable_t {
     CED_REFLECT_INFO
 
     ced_btree_p buckets;
-    size_t size;
-    size_t count;
 } ced_htable_t, *ced_htable_p;
 
 typedef struct ced_htable_node_t {
@@ -25,10 +23,9 @@ typedef struct ced_htable_node_t {
 
 /**
  * @brief Creates a new hash table
- * @param size The size of the hash table
  * @return A pointer to the new hash table
  */
-ced_htable_p ced_htable_new(size_t size);
+ced_htable_p ced_htable_new();
 
 /**
  * @brief Frees a hash table
