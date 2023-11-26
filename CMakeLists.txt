@@ -4,6 +4,7 @@ project(ced C)
 set(CMAKE_C_STANDARD 11)
 
 add_library(ced
+    src/util/hash.h
     src/cont/list.c
     src/cont/stack.c
     src/cont/queue.c

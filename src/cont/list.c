@@ -215,31 +215,6 @@ void ced_list_remove(ced_list_p list, ced_data_cmp cmp, void *data) {
     list->size--;
 }
 
-void ced_list_head(ced_list_p list, void **data, ced_list_p *rest) {
-    assert(list != NULL);
-
-    if (list->head == NULL) {
-        *data = NULL;
-        *rest = NULL;
-        return;
-    }
-
-    *data = list->head->data;
-
-    ced_list_p new_list = ced_list_new();
-    new_list->managed_data = list->managed_data;
-    new_list->size = list->size - 1;
-
-    // re-point the new list's head to the second node
-    new_list->head = list->head->next;
-    new_list->tail = list->tail;
-
-    // kill the old list's head
-    ced_list_node_free(list->head, 0);
-
-    *rest = new_list;
-}
-
 ced_list_node_p _ced_list_merge(ced_list_node_p left, ced_list_node_p right, ced_data_cmp cmp) {
     ced_list_node_p result = NULL;
 

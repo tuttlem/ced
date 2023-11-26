@@ -22,10 +22,16 @@ typedef enum {
     ced_var_type_float = 10,
     ced_var_type_double = 11,
     ced_var_type_string = 12,
-    ced_var_type_pointer = 13
+    ced_var_type_pointer = 13,
+
+    /* always an array of variants */
+    ced_var_type_array = 14,
+
+    /* keys are always strings, values are always variants */
+    ced_var_type_dict = 15,
 } ced_var_type_t;
 
-static size_t ced_var_type_sizes[14];
+static size_t ced_var_type_sizes[16];
 
 #define ced_var_type_is_null(type)      (type == ced_var_type_null)
 #define ced_var_type_is_int(type)       (type >= ced_var_type_int8 && type <= ced_var_type_bool)
@@ -34,9 +40,10 @@ static size_t ced_var_type_sizes[14];
 #define ced_var_type_is_pointer(type)   (type == ced_var_type_pointer || type == ced_var_type_string)
 
 // Variant data structure
-typedef struct {
+typedef struct ced_var_t {
     CED_REFLECT_INFO
     ced_var_type_t type;
+    size_t size;
 
     union {
         int8_t _int8;
@@ -52,6 +59,7 @@ typedef struct {
         double _double;
         char* _string;
         void* _pointer;
+        struct ced_var_t **_array;
     } data;
 } ced_var_t, *ced_var_p;
 
@@ -147,10 +155,33 @@ ced_var_p ced_var_new_string(const char* value);
 ced_var_p ced_var_new_pointer(void* value);
 
 /**
+ * @brief Create a new variant array
+ * @param values A pointer to the values for the variant to hold
+ * @param length The length of the array
+ * @return A new variant structure
+ */
+ced_var_p ced_var_new_array(ced_var_p* values, size_t length);
+
+/**
+ * @brief Retrieves an item from a variant array
+ * @param var The variant array to retrieve from
+ * @param index The index of the item to retrieve
+ * @return The variant at the specified index
+ */
+ced_var_p ced_var_array_get(ced_var_p var, size_t index);
+
+/**
  * @brief Frees a variant structure
  * @param var The variant to free
  */
 void ced_var_free(ced_var_p var);
+
+/**
+ * @brief Clones a variant structure
+ * @param var The variant to clone
+ * @return A new variant structure
+ */
+ced_var_p ced_var_clone(ced_var_p var);
 
 /**
  * @brief Converts a variant to the requested type
@@ -173,5 +204,7 @@ ced_var_p ced_var_as_type(ced_var_p var, ced_var_type_t type);
 #define ced_var_as_double(var) ced_var_as_type(var, ced_var_type_double)
 #define ced_var_as_string(var) ced_var_as_type(var, ced_var_type_string)
 #define ced_var_as_ptr(var)    ced_var_as_type(var, ced_var_type_pointer)
+#define ced_var_as_array(var)  ced_var_as_type(var, ced_var_type_array)
+#define ced_var_as_dict(var)   ced_var_as_type(var, ced_var_type_dict)
 
 #endif /* __ced_var_variant_h__ */

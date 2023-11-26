@@ -121,49 +121,8 @@ namespace {
 
         ced_list_free(list);
     }
-    TEST(ListTests, HeadAndRest) {
-        ced_list_p list = ced_list_new();
 
-        ced_list_append(list, (void *)1);
-        ced_list_append(list, (void *)2);
-        ced_list_append(list, (void *)3);
-        ced_list_append(list, (void *)4);
-        ced_list_append(list, (void *)5);
 
-        void *head;
-        ced_list_p rest;
-        ced_list_head(list, &head, &rest);
-
-        EXPECT_EQ(head, (void *)1);
-        EXPECT_EQ(rest->size, 4);
-
-        ced_list_free(rest);
-    }
-    TEST(ListTests, EnumerateWithHeadAndRest) {
-        ced_list_p list = ced_list_new();
-
-        int i = 1;
-
-        for (i = 1; i < 1000000; i++) {
-            ced_list_append(list, (void *)i);
-        }
-
-        i = 1;
-        while (list->size > 0) {
-            void *head;
-            ced_list_p rest;
-            ced_list_head(list, &head, &rest);
-
-            EXPECT_EQ(head, (void *)i);
-            EXPECT_EQ(rest->size, list->size - 1);
-
-            // ced_list_free(list);
-            list = rest;
-            i++;
-        }
-
-        ced_list_free(list);
-    }
     TEST(ListTests, GetSecondElement) {
         ced_list_p list = ced_list_new();
         ced_list_append(list, (void*)1);

@@ -139,14 +139,6 @@ void ced_list_insert_after(ced_list_p list, size_t index, void *data);
 void ced_list_remove(ced_list_p list, ced_data_cmp cmp, void *data);
 
 /**
- * @brief Removes a node from a list at a given index
- * @param list The list to remove from
- * @param data A pointer to a pointer to store the removed data in
- * @param rest The remainder of the list
- */
-void ced_list_head(ced_list_p list, void **data, ced_list_p *rest);
-
-/**
  * @brief Performs a merge sort on a list and returns the result
  * @param list The list to sort
  * @param cmp The comparator function to use

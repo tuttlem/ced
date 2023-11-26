@@ -8,6 +8,8 @@
 namespace {
     TEST(VariantTests, ConstructInt8) {
         ced_var_p var = ced_var_new_int8(1);
+
+        EXPECT_EQ(var->__info.type, reflect_type_variant);
         EXPECT_EQ(var->type, ced_var_type_int8);
         EXPECT_EQ(var->data._int8, 1);
         ced_var_free(var);
@@ -15,6 +17,8 @@ namespace {
 
     TEST(VariantTests, ConstructInt16) {
         ced_var_p var = ced_var_new_int16(1);
+
+        EXPECT_EQ(var->__info.type, reflect_type_variant);
         EXPECT_EQ(var->type, ced_var_type_int16);
         EXPECT_EQ(var->data._int16, 1);
         ced_var_free(var);
@@ -98,6 +102,58 @@ namespace {
 
         // prevents inner-free
         var->data._pointer = NULL;
+        ced_var_free(var);
+    }
+
+    TEST(VariantTests, ConstructEmptyArray) {
+        ced_var_p arr[] = {};
+
+        ced_var_p var = ced_var_new_array(arr, 0);
+
+        EXPECT_EQ(var->type, ced_var_type_array);
+        EXPECT_EQ(var->size, 0);
+
+        ced_var_free(var);
+    }
+
+    TEST(VariantTests, ConstructArray) {
+        ced_var_p arr[] = {
+            ced_var_new_int8(10),
+            ced_var_new_int16(500),
+            ced_var_new_int32(100000),
+            ced_var_new_int64(10000000000),
+            ced_var_new_string("Howdy!")
+        };
+
+        ced_var_p var = ced_var_new_array(arr, 5);
+
+        EXPECT_EQ(var->type, ced_var_type_array);
+        EXPECT_EQ(var->size, 5);
+
+        for (int i = 0; i < 5; ++i) {
+            ced_var_free(arr[i]);
+        }
+        ced_var_free(var);
+    }
+
+    TEST(VariantTests, GetThirdItemFromArray) {
+        ced_var_p arr[] = {
+                ced_var_new_int8(10),
+                ced_var_new_int16(500),
+                ced_var_new_int32(100000),
+                ced_var_new_int64(10000000000),
+                ced_var_new_string("Howdy!")
+        };
+
+        ced_var_p var = ced_var_new_array(arr, 5);
+
+        ced_var_p third = ced_var_array_get(var, 2);
+        EXPECT_EQ(third->type, ced_var_type_int32);
+        EXPECT_EQ(third->data._int32, 100000);
+
+        for (int i = 0; i < 5; ++i) {
+            ced_var_free(arr[i]);
+        }
         ced_var_free(var);
     }
 
