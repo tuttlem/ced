@@ -76,6 +76,14 @@ void ced_btree_remove(ced_btree_p tree, void *key);
 void *ced_btree_get(ced_btree_p tree, void *key);
 
 /**
+ * @brief Finds the node with the requested key
+ * @param tree The binary tree to find in
+ * @param key The key to find
+ * @return A pointer to the data if found, NULL otherwise
+ */
+ced_btree_node_p ced_btree_get_node(ced_btree_p tree, void *key);
+
+/**
  * @brief Finds the minimum data in a binary tree
  * @param tree The binary tree to find in
  * @return A pointer to the minimum data if found, NULL otherwise

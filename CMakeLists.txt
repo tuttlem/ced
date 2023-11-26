@@ -11,7 +11,9 @@ add_library(ced
     src/cont/btree.c
     src/cont/types.c
     src/cont/graph.c
+    src/cont/htable.c
     src/util/log.c
+    src/util/hash.c
     src/var/variant.c)
 
 add_subdirectory(tests)

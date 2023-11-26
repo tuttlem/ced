@@ -15,6 +15,8 @@ typedef enum {
     reflect_type_stack = 10,
     reflect_type_stack_node = 11,
     reflect_type_variant = 12,
+    reflect_type_htable = 13,
+    reflect_type_htable_node = 14,
 } ced_reflect_type_t;
 
 typedef struct {

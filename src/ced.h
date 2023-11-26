@@ -16,6 +16,7 @@ extern "C" {
 #include "./cont/queue.h"
 #include "./cont/btree.h"
 #include "./cont/graph.h"
+#include "./cont/htable.h"
 
 #include "./var/variant.h"
 

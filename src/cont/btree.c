@@ -10,6 +10,7 @@ ced_btree_p ced_btree_new(ced_data_cmp cmp) {
     assert(tree != NULL);
 
     ced_reflect_set_info(tree, reflect_type_btree);
+
     tree->root = NULL;
 
     if (cmp == NULL) {
@@ -66,10 +67,12 @@ void ced_btree_node_free(ced_btree_node_p node) {
 
     if (node->left != NULL) {
         ced_btree_node_free(node->left);
+        node->left = NULL;
     }
 
     if (node->right != NULL) {
         ced_btree_node_free(node->right);
+        node->right = NULL;
     }
 
     free(node);
@@ -87,6 +90,8 @@ void ced_btree_insert(ced_btree_p tree, void *key, void *data) {
     ced_btree_node_p node = ced_btree_node_new();
     node->key = key;
     node->data = data;
+    node->left = NULL;
+    node->right = NULL;
 
     if (tree->root == NULL) {
         tree->root = node;
@@ -212,6 +217,32 @@ void *ced_btree_get(ced_btree_p tree, void *key) {
     }
 
     return current->data;
+}
+
+/**
+ * @brief Finds the node with the requested key
+ * @param tree The binary tree to find in
+ * @param key The key to find
+ * @return A pointer to the data if found, NULL otherwise
+ */
+ced_btree_node_p ced_btree_get_node(ced_btree_p tree, void *key) {
+    assert(tree != NULL);
+
+    ced_btree_node_p current = tree->root;
+
+    while (tree->cmp(key, current->key) != 0) {
+        if (tree->cmp(key, current->key) < 0) {
+            current = current->left;
+        } else {
+            current = current->right;
+        }
+
+        if (current == NULL) {
+            return NULL;
+        }
+    }
+
+    return current;
 }
 
 /**

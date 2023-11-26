@@ -45,7 +45,7 @@ uint32_t ced_hash_jenkins(const void *key, size_t length) {
  * @param length The length of the key
  * @return The hash of the string
  */
-uint32_t hash_murmur(const void *key, size_t length, uint32_t seed) {
+uint32_t ced_hash_murmur(const void *key, size_t length, uint32_t seed) {
     const uint32_t m = 0x5bd1e995;
     const int r = 24;
 
@@ -86,7 +86,7 @@ uint32_t hash_murmur(const void *key, size_t length, uint32_t seed) {
  * @param length The length of the key
  * @return The hash of the string
  */
-uint32_t hash_fnv1a(const void *key, size_t length) {
+uint32_t ced_hash_fnv1a(const void *key, size_t length) {
     const uint32_t offset_basis = 2166136261;
     const uint32_t prime = 16777619;
 
