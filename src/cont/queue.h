@@ -7,23 +7,14 @@
 #include <stdlib.h>
 
 #include "types.h"
+#include "list.h"
 
-typedef struct ced_queue_node_t {
+#define ced_queue_size(queue) (queue->list->size)
+
+typedef struct {
     CED_REFLECT_INFO
 
-    struct ced_queue_node_t *next;
-
-    void *data;
-} ced_queue_node_t, *ced_queue_node_p;
-
-typedef struct ced_queue_t {
-    CED_REFLECT_INFO
-
-    ced_queue_node_p head;
-    ced_queue_node_p tail;
-
-    size_t size;
-    int managed_data;
+    ced_list_t *list;
 } ced_queue_t, *ced_queue_p;
 
 /**
@@ -32,7 +23,7 @@ typedef struct ced_queue_t {
  * @param queue The queue to iterate over
  */
 #define ced_queue_foreach(iter, queue) \
-   for (iter = queue->head; iter != NULL; iter = iter->next)
+   for (iter = queue->list->head; iter != NULL; iter = iter->next)
 
 /**
  * @brief Creates a new queue
@@ -45,18 +36,6 @@ ced_queue_p ced_queue_new();
  * @param queue The queue to free
  */
 void ced_queue_free(ced_queue_p queue);
-
-/**
- * @brief Creates a new queue node
- * @return A pointer to the new queue node
- */
-ced_queue_node_p ced_queue_node_new();
-
-/**
- * @brief Frees a queue node
- * @param node The queue node to free
- */
-void ced_queue_node_free(ced_queue_node_p node);
 
 /**
  * @brief Enqueues data

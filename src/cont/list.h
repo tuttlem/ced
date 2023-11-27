@@ -139,6 +139,20 @@ void ced_list_insert_after(ced_list_p list, size_t index, void *data);
 void ced_list_remove(ced_list_p list, ced_data_cmp cmp, void *data);
 
 /**
+ * @brief Removes the first node from a list
+ * @param list The list to remove from
+ * @return The data from the removed node
+ */
+void* ced_list_remove_head(ced_list_p list);
+
+/**
+ * @brief Removes the last node from a list
+ * @param list The list to remove from
+ * @return The data from the removed node
+ */
+void* ced_list_remove_tail(ced_list_p list);
+
+/**
  * @brief Performs a merge sort on a list and returns the result
  * @param list The list to sort
  * @param cmp The comparator function to use

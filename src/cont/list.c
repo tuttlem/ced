@@ -215,6 +215,49 @@ void ced_list_remove(ced_list_p list, ced_data_cmp cmp, void *data) {
     list->size--;
 }
 
+void* ced_list_remove_head(ced_list_p list) {
+    assert(list != NULL);
+
+    if (list->head == NULL) {
+        return NULL;
+    }
+
+    ced_list_node_p node = list->head;
+    void *data = node->data;
+
+    if (list->head->next != NULL) {
+        list->head->next->prev = NULL;
+    }
+
+    list->head = list->head->next;
+    ced_list_node_free(node, list->managed_data);
+    list->size--;
+
+    return data;
+}
+
+void* ced_list_remove_tail(ced_list_p list) {
+    assert(list != NULL);
+
+    if (list->tail == NULL) {
+        return NULL;
+    }
+
+    ced_list_node_p node = list->tail;
+    void *data = node->data;
+
+    if (list->tail->prev != NULL) {
+        list->tail->prev->next = NULL;
+    }
+
+    list->tail = list->tail->prev;
+    ced_list_node_free(node, list->managed_data);
+    list->size--;
+
+    return data;
+}
+
+
 ced_list_node_p _ced_list_merge(ced_list_node_p left, ced_list_node_p right, ced_data_cmp cmp) {
     ced_list_node_p result = NULL;
 

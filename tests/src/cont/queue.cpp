@@ -8,7 +8,7 @@
 namespace {
     TEST(QueueTests, Construction) {
         ced_queue_p queue = ced_queue_new();
-        EXPECT_EQ(queue->size, 0);
+        EXPECT_EQ(ced_queue_size(queue), 0);
         ced_queue_free(queue);
     }
 
@@ -21,7 +21,7 @@ namespace {
         ced_queue_enqueue(queue, (void *)4);
         ced_queue_enqueue(queue, (void *)5);
 
-        EXPECT_EQ(queue->size, 5);
+        EXPECT_EQ(ced_queue_size(queue), 5);
 
         ced_queue_free(queue);
     }
@@ -37,12 +37,12 @@ namespace {
 
         unsigned int i = 1;
 
-        while (queue->size > 0) {
+        while (ced_queue_size(queue) > 0) {
             EXPECT_EQ(ced_queue_dequeue(queue), (void *)i);
             i++;
         }
 
-        EXPECT_EQ(queue->size, 0);
+        EXPECT_EQ(ced_queue_size(queue), 0);
 
         ced_queue_free(queue);
     }
