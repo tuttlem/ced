@@ -22,6 +22,7 @@ typedef struct ced_stack_t {
     ced_stack_node_t *head;
 
     size_t size;
+    int managed_data;
 } ced_stack_t, *ced_stack_p;
 
 /**

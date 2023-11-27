@@ -27,6 +27,8 @@ typedef struct ced_graph_t {
 
     ced_list_p nodes;
     ced_list_p edges;
+
+    int managed_data;
 } ced_graph_t, *ced_graph_p;
 
 /**
@@ -98,6 +100,15 @@ void ced_graph_remove_edge(ced_graph_p graph, ced_graph_edge_p edge);
  * @return A list of nodes representing the path
  */
 ced_list_p ced_graph_find_path(ced_graph_p graph, ced_graph_node_p from, ced_graph_node_p to);
+
+/**
+ * @brief Finds a path between two nodes
+ * @param graph The graph to search
+ * @param from The starting value
+ * @param to The ending value
+ * @return A list of nodes representing the path
+ */
+ced_list_p ced_graph_find_path_between_values(ced_graph_p graph,  ced_data_cmp cmp, void *from, void *to);
 
 #endif /* __ced_cont_graph_h__ */
 

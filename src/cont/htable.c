@@ -10,6 +10,7 @@ ced_htable_p ced_htable_new() {
 
     ced_reflect_set_info(htable, reflect_type_htable);
 
+    htable->managed_data = 0;
     htable->buckets = ced_btree_new(ced_data_cmp_int32);
 
     return htable;
@@ -113,11 +114,14 @@ void ced_htable_remove(ced_htable_p htable, char *key) {
 
     if (node != NULL) {
         ced_btree_remove(htable->buckets, &hash);
-        // ced_htable_node_free(node);
 
         if (hnode != NULL) {
             free(hnode->key); /* the string */
             free(hash_ptr); /* the hash */
+
+            if (htable->managed_data) {
+                free(hnode->value);
+            }
 
             free(hnode);
         }

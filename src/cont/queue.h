@@ -23,6 +23,7 @@ typedef struct ced_queue_t {
     ced_queue_node_p tail;
 
     size_t size;
+    int managed_data;
 } ced_queue_t, *ced_queue_p;
 
 /**

@@ -8,18 +8,19 @@
 #include "btree.h"
 #include "../util/hash.h"
 
-typedef struct ced_htable_t {
-    CED_REFLECT_INFO
-
-    ced_btree_p buckets;
-} ced_htable_t, *ced_htable_p;
-
 typedef struct ced_htable_node_t {
     CED_REFLECT_INFO
 
     char *key;
     void *value;
 } ced_htable_node_t, *ced_htable_node_p;
+
+typedef struct ced_htable_t {
+    CED_REFLECT_INFO
+
+    ced_btree_p buckets;
+    int managed_data;
+} ced_htable_t, *ced_htable_p;
 
 /**
  * @brief Creates a new hash table

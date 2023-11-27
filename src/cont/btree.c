@@ -20,6 +20,7 @@ ced_btree_p ced_btree_new(ced_data_cmp cmp) {
     }
 
     tree->size = 0;
+    tree->managed_data = 0;
 
     return tree;
 }
@@ -34,7 +35,7 @@ void ced_btree_free(ced_btree_p tree) {
     ced_btree_node_p node = tree->root;
 
     if (node != NULL) {
-        ced_btree_node_free(node);
+        ced_btree_node_free(node, tree->managed_data);
     }
 
     free(tree);
@@ -61,18 +62,23 @@ ced_btree_node_p ced_btree_node_new() {
 /**
  * @brief Frees a binary tree node
  * @param node The binary tree node to free
+ * @param managed_data Whether or not the data should be freed
  */
-void ced_btree_node_free(ced_btree_node_p node) {
+void ced_btree_node_free(ced_btree_node_p node, int managed_data) {
     assert(node != NULL);
 
     if (node->left != NULL) {
-        ced_btree_node_free(node->left);
+        ced_btree_node_free(node->left, managed_data);
         node->left = NULL;
     }
 
     if (node->right != NULL) {
-        ced_btree_node_free(node->right);
+        ced_btree_node_free(node->right, managed_data);
         node->right = NULL;
+    }
+
+    if (managed_data) {
+        free(node->data);
     }
 
     free(node);
@@ -188,6 +194,10 @@ void ced_btree_remove(ced_btree_p tree, void *key) {
         }
 
         successor->left = current->left;
+    }
+
+    if (tree->managed_data) {
+        free(current->data);
     }
 
     free(current);

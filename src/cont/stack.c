@@ -12,6 +12,7 @@ ced_stack_p ced_stack_new() {
     ced_reflect_set_info(stack, reflect_type_stack);
     stack->head = NULL;
     stack->size = 0;
+    stack->managed_data = 0;
 
     return stack;
 }
@@ -24,6 +25,10 @@ void ced_stack_free(ced_stack_p stack) {
     ced_stack_node_p node, next;
 
     for (node = stack->head; node != NULL; node = next) {
+        if (stack->managed_data) {
+            free(node->data);
+        }
+
         next = node->next;
         free(node);
     }

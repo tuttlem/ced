@@ -26,6 +26,7 @@ typedef struct ced_btree_t {
 
     ced_data_cmp cmp;
     size_t size;
+    int managed_data;
 } ced_btree_t, *ced_btree_p;
 
 /**
@@ -49,8 +50,9 @@ ced_btree_node_p ced_btree_node_new();
 /**
  * @brief Frees a binary tree node
  * @param node The binary tree node to free
+ * @param managed_data Whether or not to free the data
  */
-void ced_btree_node_free(ced_btree_node_p node);
+void ced_btree_node_free(ced_btree_node_p node, int managed_data);
 
 /**
  * @brief Inserts data into a binary tree

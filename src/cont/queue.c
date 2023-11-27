@@ -12,6 +12,7 @@ ced_queue_p ced_queue_new() {
     queue->head = NULL;
     queue->tail = NULL;
     queue->size = 0;
+    queue->managed_data = 0;
 
     return queue;
 }
@@ -24,6 +25,10 @@ void ced_queue_free(ced_queue_p queue) {
     ced_queue_node_p node, next;
 
     for (node = queue->head; node != NULL; node = next) {
+        if (queue->managed_data) {
+            free(node->data);
+        }
+
         next = node->next;
         free(node);
     }
@@ -51,6 +56,7 @@ ced_queue_node_p ced_queue_node_new() {
  * @param node The queue node to free
  */
 void ced_queue_node_free(ced_queue_node_p node) {
+    assert(node != NULL);
     free(node);
 }
 

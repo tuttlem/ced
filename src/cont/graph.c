@@ -11,6 +11,8 @@ ced_graph_p ced_graph_new() {
 
     ced_reflect_set_info(graph, reflect_type_graph);
 
+    graph->managed_data = 0;
+
     graph->nodes = ced_list_new();
     graph->nodes->managed_data = 1;
 
@@ -26,6 +28,21 @@ ced_graph_p ced_graph_new() {
  */
 void ced_graph_free(ced_graph_p graph) {
     assert(graph != NULL);
+
+    if (graph->managed_data) {
+        ced_list_node_p node, edge;
+        ced_list_foreach(node, graph->nodes) {
+            ced_graph_node_p node_data = node->data;
+            free(node_data->data);
+            node_data = NULL;
+        }
+        ced_list_foreach(edge, graph->edges) {
+            ced_graph_node_p edge_data = edge->data;
+            free(edge_data->data);
+            edge_data = NULL;
+        }
+
+    }
 
     ced_list_free(graph->edges);
     ced_list_free(graph->nodes);
@@ -233,4 +250,26 @@ ced_list_p ced_graph_find_path(ced_graph_p graph, ced_graph_node_p from, ced_gra
     }
 
     return path;
+}
+
+/**
+ * @brief Finds a path between two nodes
+ * @param graph The graph to search
+ * @param from The starting value
+ * @param to The ending value
+ * @return A list of nodes representing the path
+ */
+ced_list_p ced_graph_find_path_between_values(ced_graph_p graph,  ced_data_cmp cmp, void *from, void *to) {
+    assert(graph != NULL);
+    assert(from != NULL);
+    assert(to != NULL);
+
+    ced_graph_node_p from_node = ced_graph_find_node(graph, cmp, from);
+    ced_graph_node_p to_node = ced_graph_find_node(graph, cmp, to);
+
+    if (from_node == NULL || to_node == NULL) {
+        return NULL;
+    }
+
+    return ced_graph_find_path(graph, from_node, to_node);
 }
