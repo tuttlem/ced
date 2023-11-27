@@ -6,23 +6,15 @@
 #include <stddef.h>
 #include <stdlib.h>
 
+#include "list.h"
 #include "data_cmp.h"
 
-typedef struct ced_stack_node_t {
+#define ced_stack_size(stack) (stack->list->size)
+
+typedef struct {
     CED_REFLECT_INFO
 
-    struct ced_stack_node_t *next;
-
-    void *data;
-} ced_stack_node_t, *ced_stack_node_p;
-
-typedef struct ced_stack_t {
-    CED_REFLECT_INFO
-
-    ced_stack_node_t *head;
-
-    size_t size;
-    int managed_data;
+    ced_list_p list;
 } ced_stack_t, *ced_stack_p;
 
 /**
@@ -31,7 +23,7 @@ typedef struct ced_stack_t {
  * @param stack The stack to iterate over
  */
 #define ced_stack_foreach(iter, stack) \
-   for (iter = stack->head; iter != NULL; iter = iter->next)
+   for (iter = stack->list->head; iter != NULL; iter = iter->next)
 
 /**
  * @brief Creates a new stack

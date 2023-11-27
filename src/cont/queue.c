@@ -55,7 +55,7 @@ void *ced_queue_dequeue(ced_queue_p queue) {
 void *ced_queue_peek(ced_queue_p queue) {
     assert(queue != NULL);
 
-    if (queue->list->size == 0) {
+    if (ced_queue_size(queue) == 0) {
         return NULL;
     }
 

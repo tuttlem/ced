@@ -8,7 +8,7 @@
 namespace {
     TEST(StackTests, Construction) {
         ced_stack_p stack = ced_stack_new();
-        EXPECT_EQ(stack->size, 0);
+        EXPECT_EQ(ced_stack_size(stack), 0);
         ced_stack_free(stack);
     }
 
@@ -21,7 +21,7 @@ namespace {
         ced_stack_push(stack, (void *)4);
         ced_stack_push(stack, (void *)5);
 
-        EXPECT_EQ(stack->size, 5);
+        EXPECT_EQ(ced_stack_size(stack), 5);
 
         ced_stack_free(stack);
     }
@@ -37,13 +37,13 @@ namespace {
 
         unsigned int i = 5;
 
-        while (stack->size > 0) {
-            EXPECT_EQ(stack->size, i);
+        while (ced_stack_size(stack) > 0) {
+            EXPECT_EQ(ced_stack_size(stack), i);
             EXPECT_EQ(ced_stack_pop(stack), (void *)i);
             i--;
         }
 
-        EXPECT_EQ(stack->size, 0);
+        EXPECT_EQ(ced_stack_size(stack), 0);
 
         ced_stack_free(stack);
     }

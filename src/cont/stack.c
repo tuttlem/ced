@@ -10,9 +10,7 @@ ced_stack_p ced_stack_new() {
     assert(stack != NULL);
 
     ced_reflect_set_info(stack, reflect_type_stack);
-    stack->head = NULL;
-    stack->size = 0;
-    stack->managed_data = 0;
+    stack->list = ced_list_new();
 
     return stack;
 }
@@ -22,16 +20,10 @@ ced_stack_p ced_stack_new() {
  * @param stack The stack to free
  */
 void ced_stack_free(ced_stack_p stack) {
-    ced_stack_node_p node, next;
+    assert(stack != NULL);
 
-    for (node = stack->head; node != NULL; node = next) {
-        if (stack->managed_data) {
-            free(node->data);
-        }
-
-        next = node->next;
-        free(node);
-    }
+    ced_list_free(stack->list);
+    stack->list = NULL;
 
     free(stack);
 }
@@ -41,15 +33,8 @@ void ced_stack_free(ced_stack_p stack) {
  * @return A pointer to the new stack node
  */
 void ced_stack_push(ced_stack_p stack, void *data) {
-    ced_stack_node_p node = malloc(sizeof(ced_stack_node_t));
-    assert(node != NULL);
-
-    ced_reflect_set_info(node, reflect_type_stack_node);
-    node->data = data;
-    node->next = stack->head;
-
-    stack->head = node;
-    stack->size++;
+    assert(stack != NULL);
+    ced_list_prepend(stack->list, data);
 }
 
 /**
@@ -57,20 +42,8 @@ void ced_stack_push(ced_stack_p stack, void *data) {
  * @param node The stack node to free
  */
 void *ced_stack_pop(ced_stack_p stack) {
-    ced_stack_node_p node = stack->head;
-    void *data;
-
-    if (node == NULL) {
-        return NULL;
-    }
-
-    stack->head = node->next;
-    stack->size--;
-
-    data = node->data;
-    free(node);
-
-    return data;
+    assert(stack != NULL);
+    return ced_list_remove_head(stack->list);
 }
 
 /**
@@ -79,9 +52,11 @@ void *ced_stack_pop(ced_stack_p stack) {
  * @return The data at the top of the stack
  */
 void *ced_stack_peek(ced_stack_p stack) {
-    if (stack->head == NULL) {
+    assert(stack != NULL);
+
+    if (ced_stack_size(stack) == 0) {
         return NULL;
     }
 
-    return stack->head->data;
+    return stack->list->head->data;
 }
