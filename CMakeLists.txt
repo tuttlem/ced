@@ -9,7 +9,7 @@ add_library(ced
     src/cont/stack.c
     src/cont/queue.c
     src/cont/btree.c
-    src/cont/types.c
+        src/cont/data_cmp.c
     src/cont/graph.c
     src/cont/htable.c
     src/util/log.c

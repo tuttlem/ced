@@ -1,5 +1,5 @@
 
-#include "types.h"
+#include "data_cmp.h"
 
 int _ced_data_cmp_default(const void *a, const void *b) {
     return a > b ? 1 : a < b ? -1 : 0;

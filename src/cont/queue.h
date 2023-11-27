@@ -6,7 +6,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-#include "types.h"
+#include "data_cmp.h"
 #include "list.h"
 
 #define ced_queue_size(queue) (queue->list->size)

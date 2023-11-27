@@ -7,7 +7,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-#include "types.h"
+#include "data_cmp.h"
 
 typedef struct ced_btree_node_t {
     CED_REFLECT_INFO

@@ -10,7 +10,7 @@ extern "C" {
 
 #include "./util/log.h"
 
-#include "./cont/types.h"
+#include "./cont/data_cmp.h"
 #include "./cont/list.h"
 #include "./cont/stack.h"
 #include "./cont/queue.h"

@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "./types.h"
+#include "./data_cmp.h"
 #include "./list.h"
 
 typedef struct ced_graph_node_t {
