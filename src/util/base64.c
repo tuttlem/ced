@@ -12,7 +12,7 @@ const char _ced_base64_table_enc[] = {
         '4', '5', '6' ,'7', '8', '9', '+', '/'
 };
 
-const char *_ced_base64_table_dec[] = {
+const char _ced_base64_table_dec[] = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 63,
@@ -110,10 +110,10 @@ int ced_base64_decode(const char* encoded_data, size_t input_length, unsigned ch
 
     size_t i, j;
     for (i = 0, j = 0; i < input_length;) {
-        uint32_t sextet_a = encoded_data[i] == '=' ? 0 & i++ : _ced_base64_table_dec[(size_t)encoded_data[i++]];
-        uint32_t sextet_b = encoded_data[i] == '=' ? 0 & i++ : _ced_base64_table_dec[(size_t)encoded_data[i++]];
-        uint32_t sextet_c = encoded_data[i] == '=' ? 0 & i++ : _ced_base64_table_dec[(size_t)encoded_data[i++]];
-        uint32_t sextet_d = encoded_data[i] == '=' ? 0 & i++ : _ced_base64_table_dec[(size_t)encoded_data[i++]];
+        uint32_t sextet_a = (uint32_t) (encoded_data[i] == '=' ? 0 & i++ : _ced_base64_table_dec[(size_t) encoded_data[i++]]);
+        uint32_t sextet_b = (uint32_t) (encoded_data[i] == '=' ? 0 & i++ : _ced_base64_table_dec[(size_t)encoded_data[i++]]);
+        uint32_t sextet_c = (uint32_t) (encoded_data[i] == '=' ? 0 & i++ : _ced_base64_table_dec[(size_t)encoded_data[i++]]);
+        uint32_t sextet_d = (uint32_t) (encoded_data[i] == '=' ? 0 & i++ : _ced_base64_table_dec[(size_t)encoded_data[i++]]);
 
         if ((sextet_a | sextet_b | sextet_c | sextet_d) & 0x80000000) {
             free(*decoded_data);

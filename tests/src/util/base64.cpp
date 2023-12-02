@@ -7,13 +7,13 @@
 
 namespace {
     TEST(Base64Tests, EncodeNull) {
-        char *encoded = ced_base64_encode(NULL, 0);
-        EXPECT_TRUE(encoded == NULL);
+        char *encoded = ced_base64_encode(nullptr, 0);
+        EXPECT_TRUE(encoded == nullptr);
     }
     TEST(Base64Tests, EncodeEmpty) {
         unsigned char in[] = { };
         char *encoded = ced_base64_encode(in, 0);
-        EXPECT_TRUE(encoded == NULL);
+        EXPECT_TRUE(encoded == nullptr);
     }
     TEST(Base64Tests, EncodeHello) {
         unsigned char in[] = { 'h', 'e', 'l', 'l', 'o' };
@@ -24,20 +24,20 @@ namespace {
     TEST(Base64Tests, DecodeNull) {
         unsigned char *decoded;
         size_t decoded_len;
-        int result = ced_base64_decode(NULL, 0, &decoded, &decoded_len);
+        int result = ced_base64_decode(nullptr, 0, &decoded, &decoded_len);
         EXPECT_EQ(result, CED_FAILURE);
-        EXPECT_TRUE(decoded == NULL);
+        EXPECT_TRUE(decoded == nullptr);
     }
     TEST(Base64Tests, DecodeEmpty) {
-        char *in = "";
+        const char *in = "";
         unsigned char *decoded;
         size_t decoded_len;
         int result = ced_base64_decode(in, 0, &decoded, &decoded_len);
         EXPECT_EQ(result, CED_FAILURE);
-        EXPECT_TRUE(decoded == NULL);
+        EXPECT_TRUE(decoded == nullptr);
     }
     TEST(Base64Tests, DecodeHello) {
-        char *in = "aGVsbG8=";
+        const char *in = "aGVsbG8=";
         unsigned char *decoded;
         size_t decoded_len;
         int result = ced_base64_decode(in, strlen(in), &decoded, &decoded_len);

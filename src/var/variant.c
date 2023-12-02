@@ -299,7 +299,7 @@ ced_var_p ced_var_clone(ced_var_p var) {
         case ced_var_type_array:
             new_var->data._array = malloc(sizeof(ced_var_p) * var->size);
 
-            ced_var_p *item = &new_var->data._array;
+            ced_var_p *item = new_var->data._array;
             for (size_t i = 0; i < var->size; ++i) {
                 item[i] = ced_var_clone(var->data._array[i]);
             }

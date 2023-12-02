@@ -8,6 +8,7 @@
 
 #include "../defs.h"
 #include "../reflect.h"
+#include "../util/base64.h"
 
 typedef struct {
     CED_REFLECT_INFO

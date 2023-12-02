@@ -102,7 +102,8 @@ ced_graph_edge_p ced_graph_add_edge(ced_graph_p graph, ced_graph_node_p from, ce
  */
 ced_graph_node_p ced_graph_find_node(ced_graph_p graph, ced_data_cmp cmp, void *data) {
     assert(graph != NULL);
-    return ced_list_find(graph->nodes, cmp, data);
+    ced_list_node_p list_node = ced_list_find(graph->nodes, cmp, data);
+    return list_node == NULL ? NULL : (ced_graph_node_p)list_node->data;
 }
 
 /**
@@ -126,7 +127,8 @@ void ced_graph_remove_node(ced_graph_p graph, ced_graph_node_p node) {
  */
 ced_graph_edge_p ced_graph_find_edge(ced_graph_p graph, ced_data_cmp cmp, void *data) {
     assert(graph != NULL);
-    return ced_list_find(graph->edges, cmp, data);
+    ced_list_node_p list_node = ced_list_find(graph->edges, cmp, data);
+    return list_node == NULL ? NULL : (ced_graph_edge_p)list_node->data;
 }
 
 /**

@@ -215,7 +215,7 @@ char *_ced_buffer_to_string_base64(ced_buffer_p buffer) {
         return NULL;
     }
 
-    return NULL;
+    return ced_base64_encode(buffer->data, buffer->size);
 }
 
 char *_ced_buffer_to_string_ascii(ced_buffer_p buffer) {
@@ -249,7 +249,7 @@ char *ced_buffer_to_string(ced_buffer_p buffer, ced_encoding_t encoding) {
         case ced_encoding_hex:
             return _ced_buffer_to_string_hex(buffer);
         case ced_encoding_base64:
-            return NULL;
+            return _ced_buffer_to_string_base64(buffer);
         case ced_encoding_ascii:
             return _ced_buffer_to_string_ascii(buffer);
     }
