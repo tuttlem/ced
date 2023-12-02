@@ -11,7 +11,9 @@ add_executable(Google_Tests_run
         src/cont/btree.cpp
         src/cont/graph.cpp
         src/cont/htable.cpp
-        src/var/variant.cpp)
+        src/var/variant.cpp
+        src/util/base64.cpp
+        src/mem/buffer.cpp)
 
 # target_link_libraries(Google_Tests_run )
 target_link_libraries(Google_Tests_run  gtest gtest_main ced)

@@ -15,6 +15,7 @@ typedef enum {
     reflect_type_variant = 12,
     reflect_type_htable = 13,
     reflect_type_htable_node = 14,
+    reflect_type_buffer = 15,
 } ced_reflect_type_t;
 
 typedef struct {

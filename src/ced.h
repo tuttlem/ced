@@ -9,6 +9,10 @@ extern "C" {
 #include "./reflect.h"
 
 #include "./util/log.h"
+#include "./util/hash.h"
+#include "./util/base64.h"
+
+#include "./mem/buffer.h"
 
 #include "./cont/data_cmp.h"
 #include "./cont/list.h"

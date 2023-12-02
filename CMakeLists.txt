@@ -4,16 +4,18 @@ project(ced C)
 set(CMAKE_C_STANDARD 11)
 
 add_library(ced
+    src/mem/buffer.c
     src/util/hash.h
     src/cont/list.c
     src/cont/stack.c
     src/cont/queue.c
     src/cont/btree.c
-        src/cont/data_cmp.c
+    src/cont/data_cmp.c
     src/cont/graph.c
     src/cont/htable.c
     src/util/log.c
     src/util/hash.c
+    src/util/base64.c
     src/var/variant.c)
 
 add_subdirectory(tests)
