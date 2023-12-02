@@ -38,7 +38,7 @@ ced_buffer_p ced_buffer_new(size_t size) {
  * @param data The data to copy into the buffer
  * @return A pointer to the new buffer
  */
-ced_buffer_p ced_buffer_new_data(size_t size, const void *data) {
+ced_buffer_p ced_buffer_new_raw(size_t size, const void *data) {
     if (data == NULL || size == 0) {
         return NULL;
     }
@@ -50,6 +50,115 @@ ced_buffer_p ced_buffer_new_data(size_t size, const void *data) {
     }
 
     memcpy(buffer->data, data, size);
+    return buffer;
+}
+
+/**
+ * @brief Creates a new buffer
+ * @param data The string to create a buffer from
+ * @return A pointer to the new buffer
+ */
+ced_buffer_p ced_buffer_new_str(const char *data) {
+    if (data == NULL) {
+        return NULL;
+    }
+
+    size_t size = strlen(data);
+    ced_buffer_p buffer = ced_buffer_new(size);
+
+    if (buffer == NULL) {
+        return NULL;
+    }
+
+    memcpy(buffer->data, data, size);
+    return buffer;
+}
+
+/**
+ * @brief Creates a new buffer from a file
+ * @param path The path to the file
+ * @return A pointer to the new buffer
+ */
+ced_buffer_p ced_buffer_new_file(const char *path) {
+    if (path == NULL) {
+        return NULL;
+    }
+
+    FILE *file = fopen(path, "rb");
+
+    if (file == NULL) {
+        return NULL;
+    }
+
+    // get the size of the file, to create a buffer
+    fseek(file, 0, SEEK_END);
+    size_t size = ftell(file);
+
+    if (size == 0) {
+        fclose(file);
+        return NULL;
+    }
+
+    // rewind the file
+    fseek(file, 0, SEEK_SET);
+
+    ced_buffer_p buffer = ced_buffer_new(size);
+    size_t size_read = fread(buffer->data, 1, size, file);
+    fclose(file);
+
+    if (size_read != size) {
+        ced_buffer_free(buffer);
+        return NULL;
+    }
+
+    return buffer;
+}
+
+/**
+ * @Brief Creates a new buffer from the data at the file handle
+ * @param handle The file handle
+ * @return A pointer to the new buffer
+ */
+ced_buffer_p ced_buffer_new_handle(int handle) {
+    if (handle < 0) {
+        return NULL;
+    }
+
+    ced_buffer_p buffer = ced_buffer_new(1024);
+
+    ssize_t size = 0;
+
+    while ((size = read(handle, buffer->data, buffer->size)) > 0) {
+        if (ced_buffer_resize(buffer, buffer->size + size) != CED_SUCCESS) {
+            ced_buffer_free(buffer);
+            return NULL;
+        }
+    }
+
+    return buffer;
+}
+
+
+/**
+ * @brief Creates a new buffer full of random data
+ * @param size The size of the buffer
+ * @return A pointer to the new buffer
+ */
+ced_buffer_p ced_buffer_new_random(size_t size) {
+    if (size == 0) {
+        return NULL;
+    }
+
+    ced_buffer_p buffer = ced_buffer_new(size);
+
+    if (buffer == NULL) {
+        return NULL;
+    }
+
+    for (size_t i = 0; i < size; ++i) {
+        ((unsigned char *)buffer->data)[i] = rand() % 256;
+    }
+
     return buffer;
 }
 

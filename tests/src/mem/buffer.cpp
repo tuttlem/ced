@@ -22,14 +22,14 @@ namespace {
     }
     TEST(BufferTests, ConstructWithSizeAndData) {
         char *data = "Hello, World!";
-        ced_buffer_p buffer = ced_buffer_new_data(256, data);
+        ced_buffer_p buffer = ced_buffer_new_raw(256, data);
         EXPECT_EQ(buffer->size, 256);
         EXPECT_TRUE(memcmp(buffer->data, data, 256) == 0);
 
         ced_buffer_free(buffer);
     }
     TEST(BufferTests, ResizeHigher) {
-        ced_buffer_p buffer = ced_buffer_new_data(256, "Hello, World!");
+        ced_buffer_p buffer = ced_buffer_new_raw(256, "Hello, World!");
         EXPECT_EQ(buffer->size, 256);
         int status = ced_buffer_resize(buffer, 512);
         EXPECT_EQ(status, 0);
@@ -38,7 +38,7 @@ namespace {
         ced_buffer_free(buffer);
     }
     TEST(BufferTests, ResizeLower) {
-        ced_buffer_p buffer = ced_buffer_new_data(256, "Hello, World!");
+        ced_buffer_p buffer = ced_buffer_new_raw(256, "Hello, World!");
         EXPECT_EQ(buffer->size, 256);
         int status = ced_buffer_resize(buffer, 5);
         EXPECT_EQ(status, 0);
@@ -47,47 +47,47 @@ namespace {
         ced_buffer_free(buffer);
     }
     TEST(BufferTests, ResizeToZero) {
-        ced_buffer_p buffer = ced_buffer_new_data(256, "Hello, World!");
+        ced_buffer_p buffer = ced_buffer_new_raw(256, "Hello, World!");
         EXPECT_EQ(buffer->size, 256);
         int status = ced_buffer_resize(buffer, 0);
         EXPECT_EQ(status, -1);
         ced_buffer_free(buffer);
     }
     TEST(BufferTests, Compare) {
-        ced_buffer_p buffer = ced_buffer_new_data(256, "Hello, World!");
+        ced_buffer_p buffer = ced_buffer_new_raw(256, "Hello, World!");
         EXPECT_EQ(buffer->size, 256);
-        ced_buffer_p buffer2 = ced_buffer_new_data(256, "Hello, World!");
+        ced_buffer_p buffer2 = ced_buffer_new_raw(256, "Hello, World!");
         EXPECT_EQ(buffer2->size, 256);
         EXPECT_EQ(ced_buffer_cmp(buffer, buffer2), 0);
         ced_buffer_free(buffer);
         ced_buffer_free(buffer2);
     }
     TEST(BufferTests, CompareDifferent) {
-        ced_buffer_p buffer = ced_buffer_new_data(256, "Hello, World!");
+        ced_buffer_p buffer = ced_buffer_new_raw(256, "Hello, World!");
         EXPECT_EQ(buffer->size, 256);
-        ced_buffer_p buffer2 = ced_buffer_new_data(256, "Hello, World");
+        ced_buffer_p buffer2 = ced_buffer_new_raw(256, "Hello, World");
         EXPECT_EQ(buffer2->size, 256);
         EXPECT_TRUE(ced_buffer_cmp(buffer, buffer2) > 0);
         ced_buffer_free(buffer);
         ced_buffer_free(buffer2);
     }
     TEST(BufferTests, CompareDifferentSize) {
-        ced_buffer_p buffer = ced_buffer_new_data(256, "Hello, World!");
+        ced_buffer_p buffer = ced_buffer_new_raw(256, "Hello, World!");
         EXPECT_EQ(buffer->size, 256);
-        ced_buffer_p buffer2 = ced_buffer_new_data(512, "Hello, World!");
+        ced_buffer_p buffer2 = ced_buffer_new_raw(512, "Hello, World!");
         EXPECT_EQ(buffer2->size, 512);
         EXPECT_EQ(ced_buffer_cmp(buffer, buffer2), -1);
         ced_buffer_free(buffer);
         ced_buffer_free(buffer2);
     }
     TEST(BufferTests, CompareNull) {
-        ced_buffer_p buffer = ced_buffer_new_data(256, "Hello, World!");
+        ced_buffer_p buffer = ced_buffer_new_raw(256, "Hello, World!");
         EXPECT_EQ(buffer->size, 256);
         EXPECT_EQ(ced_buffer_cmp(buffer, NULL), -1);
         ced_buffer_free(buffer);
     }
     TEST(BufferTests, Duplicate) {
-        ced_buffer_p buffer = ced_buffer_new_data(256, "Hello, World!");
+        ced_buffer_p buffer = ced_buffer_new_raw(256, "Hello, World!");
         EXPECT_EQ(buffer->size, 256);
         ced_buffer_p buffer2 = ced_buffer_dup(buffer);
         EXPECT_EQ(buffer2->size, 256);
@@ -108,6 +108,22 @@ namespace {
         unsigned char *buffer_data = (unsigned char*)buffer->data;
         // EXPECT_TRUE(memcmp(buffer_data, ones, 10) == 0);
         EXPECT_EQ(buffer_data[0], ones[0]);
+        ced_buffer_free(buffer);
+    }
+    TEST(BufferTests, FillRandom) {
+        ced_buffer_p buffer1 = ced_buffer_new_random(10);
+        EXPECT_EQ(buffer1->size, 10);
+        ced_buffer_p buffer2 = ced_buffer_new_random(10);
+        EXPECT_EQ(buffer2->size, 10);
+
+        EXPECT_NE(ced_buffer_cmp(buffer1, buffer2), 0);
+        ced_buffer_free(buffer1);
+        ced_buffer_free(buffer2);
+    }
+    TEST(BufferTests, CreateStringBuffer) {
+        ced_buffer_p buffer = ced_buffer_new_str("Hello, World!");
+        EXPECT_EQ(buffer->size, 13);
+        EXPECT_TRUE(memcmp(buffer->data, "Hello, World!", 13) == 0);
         ced_buffer_free(buffer);
     }
 }
