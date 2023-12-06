@@ -50,9 +50,10 @@ ced_buffer_p ced_buffer_new_file(const char *path);
 /**
  * @Brief Creates a new buffer from the data at the file handle
  * @param handle The file handle
+ * @param _chunk_size The size of the chunks to read
  * @return A pointer to the new buffer
  */
-ced_buffer_p ced_buffer_new_handle(int handle);
+ced_buffer_p ced_buffer_new_handle(int handle, size_t _chunk_size);
 
 /**
  * @brief Creates a new buffer full of random data
@@ -82,6 +83,14 @@ int ced_buffer_resize(ced_buffer_p buffer, size_t size);
  * @return 0 if the buffers are equal, -1 if the first buffer is less than the second, 1 if the first buffer is greater than the second
  */
 int ced_buffer_cmp(ced_buffer_p buffer1, ced_buffer_p buffer2);
+
+/**
+ * @brief Compares the contents of a buffer to a string
+ * @param buffer1 The first buffer
+ * @param s The string to compare to
+ * @return 0 if the buffers are equal, -1 if the first buffer is less than the second, 1 if the first buffer is greater than the second
+ */
+int ced_buffer_cmp_str(ced_buffer_p buffer1, const char *s);
 
 /**
  * @brief Duplicates a buffer

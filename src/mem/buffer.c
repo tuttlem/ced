@@ -117,23 +117,51 @@ ced_buffer_p ced_buffer_new_file(const char *path) {
 /**
  * @Brief Creates a new buffer from the data at the file handle
  * @param handle The file handle
+ * @param _chunk_size The size of the chunks to read
  * @return A pointer to the new buffer
  */
-ced_buffer_p ced_buffer_new_handle(int handle) {
+ced_buffer_p ced_buffer_new_handle(int handle, size_t _chunk_size) {
+    size_t chunk_size = 4096;
+
+    if (_chunk_size > 0) {
+        chunk_size = _chunk_size;
+    }
+
     if (handle < 0) {
         return NULL;
     }
 
-    ced_buffer_p buffer = ced_buffer_new(1024);
+    ced_buffer_p buffer = ced_buffer_new(chunk_size);
 
-    ssize_t size = 0;
+    ssize_t total_read = 0, bytes_read = 0;
 
-    while ((size = read(handle, buffer->data, buffer->size)) > 0) {
-        if (ced_buffer_resize(buffer, buffer->size + size) != CED_SUCCESS) {
+    do {
+        if (total_read + chunk_size > buffer->size) {
+            // Expand the buffer if necessary
+            if (ced_buffer_resize(buffer, buffer->size + chunk_size) != CED_SUCCESS) {
+                ced_buffer_free(buffer);
+                return NULL;
+            }
+        }
+
+        bytes_read = read(handle, buffer->data + total_read, chunk_size);
+        // bytes_read = recv(handle, buffer->data + total_read, chunk_size, MSG_DONTWAIT);
+        if (bytes_read < 0) {
+            ced_buffer_free(buffer);
+            return NULL;
+        }
+
+        total_read += bytes_read;
+    } while (bytes_read == chunk_size);
+
+    if (total_read < buffer->size) {
+        if (ced_buffer_resize(buffer, total_read) != CED_SUCCESS) {
             ced_buffer_free(buffer);
             return NULL;
         }
     }
+
+    printf("Read %zd bytes\n", total_read);
 
     return buffer;
 }
@@ -239,6 +267,36 @@ int ced_buffer_cmp(ced_buffer_p buffer1, ced_buffer_p buffer2) {
     }
 
     return memcmp(buffer1->data, buffer2->data, buffer1->size);
+}
+
+/**
+ * @brief Compares the contents of a buffer to a string
+ * @param buffer1 The first buffer
+ * @param s The string to compare to
+ * @return 0 if the buffers are equal, -1 if the first buffer is less than the second, 1 if the first buffer is greater than the second
+ */
+int ced_buffer_cmp_str(ced_buffer_p buffer1, const char *s) {
+    if (buffer1 == NULL || s == NULL) {
+        return -1;
+    }
+
+    if (buffer1->data == NULL) {
+        return -1;
+    }
+
+    size_t slen = strlen(s);
+
+    // size based comparison
+    if (buffer1->size < slen) {
+        return -1;
+    }
+
+    // reverse view: size based comparison
+    if (buffer1->size > slen) {
+        return 1;
+    }
+
+    return strncmp(buffer1->data, s, buffer1->size);
 }
 
 /**
