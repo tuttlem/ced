@@ -153,6 +153,12 @@ void* ced_list_remove_head(ced_list_p list);
 void* ced_list_remove_tail(ced_list_p list);
 
 /**
+ * @brief Empties a list
+ * @param list The list to empty
+ */
+void ced_list_clear(ced_list_p list);
+
+/**
  * @brief Performs a merge sort on a list and returns the result
  * @param list The list to sort
  * @param cmp The comparator function to use

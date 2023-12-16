@@ -5,6 +5,7 @@ set(CMAKE_C_STANDARD 11)
 
 add_library(ced
     src/mem/buffer.c
+    src/net/server.c
     src/util/hash.h
     src/cont/list.c
     src/cont/stack.c

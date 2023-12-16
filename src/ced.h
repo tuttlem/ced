@@ -24,6 +24,8 @@ extern "C" {
 
 #include "./var/variant.h"
 
+#include "./net/server.h"
+
 #ifdef __cplusplus
 }
 #endif

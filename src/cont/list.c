@@ -257,6 +257,24 @@ void* ced_list_remove_tail(ced_list_p list) {
     return data;
 }
 
+/**
+ * @brief Empties a list
+ * @param list The list to empty
+ */
+void ced_list_clear(ced_list_p list) {
+    assert(list != NULL);
+
+    ced_list_node_p node, next;
+    for (node = list->head; node != NULL; node = next) {
+        next = node->next;
+        ced_list_node_free(node, list->managed_data);
+    }
+
+    list->head = NULL;
+    list->tail = NULL;
+    list->size = 0;
+}
+
 
 ced_list_node_p _ced_list_merge(ced_list_node_p left, ced_list_node_p right, ced_data_cmp cmp) {
     ced_list_node_p result = NULL;

@@ -16,6 +16,8 @@ typedef enum {
     reflect_type_htable = 13,
     reflect_type_htable_node = 14,
     reflect_type_buffer = 15,
+    reflect_type_server = 16,
+    reflect_type_server_client = 17,
 } ced_reflect_type_t;
 
 typedef struct {
