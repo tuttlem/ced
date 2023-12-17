@@ -188,6 +188,105 @@ int ced_server_start(ced_server_p server) {
 }
 
 /**
+ * @brief Starts a server using multiplexed I/O
+ * @param server The server to start
+ * @return 0 on success, -1 on failure
+ */
+int ced_server_start_mio(ced_server_p server) {
+    if (server == NULL) {
+        return CED_FAILURE;
+    }
+
+    if (server->running) {
+        return CED_FAILURE;
+    }
+
+    if ((server->fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+        ced_log("Failed to start server: %s\n", strerror(errno));
+        return CED_FAILURE;
+    }
+
+    int opt = 1;
+    if (setsockopt(server->fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
+        ced_log("Failed to set socket options: %s\n", strerror(errno));
+        return CED_FAILURE;
+    }
+
+    struct sockaddr_in address;
+
+    address.sin_family = AF_INET;
+
+    if (server->host != NULL) {
+        address.sin_addr.s_addr = inet_addr(server->host);
+    } else {
+        address.sin_addr.s_addr = htonl(INADDR_ANY);
+    }
+
+    address.sin_port = htons(server->port);
+
+    if (bind(server->fd, (struct sockaddr*)&address, sizeof(address)) < 0) {
+        ced_log("Failed to bind: %s\n", strerror(errno));
+        return CED_FAILURE;
+    }
+
+    if (listen(server->fd, 10) < 0) {
+        ced_log("Failed to start listening: %s\n", strerror(errno));
+        return CED_FAILURE;
+    }
+
+    server->running = 1;
+
+    fd_set readfds;
+    int max_fd = server->fd;
+
+    while (server->running) {
+        FD_ZERO(&readfds);
+        FD_SET(server->fd, &readfds);
+
+        ced_list_node_p client_node;
+
+        ced_list_foreach(client_node, server->clients) {
+            ced_server_client_p client = (ced_server_client_p) client_node->data;
+            FD_SET(client->fd, &readfds);
+
+            if (client->fd > max_fd) {
+                max_fd = client->fd;
+            }
+        }
+
+        if (select(max_fd + 1, &readfds, NULL, NULL, NULL) < 0) {
+            ced_log("Failed to select: %s\n", strerror(errno));
+            return CED_FAILURE;
+        }
+
+        if (FD_ISSET(server->fd, &readfds)) {
+            int new_socket;
+            struct sockaddr_in address;
+            int addr_len = sizeof(address);
+
+            if ((new_socket = accept(server->fd, (struct sockaddr*)&address, (socklen_t*)&addr_len)) < 0) {
+                ced_log("Failed to accept: %s\n", strerror(errno));
+                return CED_FAILURE;
+            }
+
+            ced_server_client_p client = ced_server_client_new(
+                new_socket,
+                inet_ntoa(address.sin_addr),
+                ntohs(address.sin_port)
+            );
+
+            client->server = server;
+
+            ced_list_append(server->clients, client);
+
+            if (server->handler != NULL) {
+                server->handler(client);
+            }
+        }
+    }
+}
+
+/**
  * @brief Finishes a client connection
  * @param client The client to finish
  * @return 0 on success, -1 on failure

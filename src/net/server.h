@@ -82,6 +82,13 @@ void ced_server_client_free(ced_server_client_p client);
 int ced_server_start(ced_server_p server);
 
 /**
+ * @brief Starts a server using multiplexed I/O
+ * @param server The server to start
+ * @return 0 on success, -1 on failure
+ */
+int ced_server_start_mio(ced_server_p server);
+
+/**
  * @brief Finishes a client connection
  * @param client The client to finish
  * @return 0 on success, -1 on failure
