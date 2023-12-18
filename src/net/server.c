@@ -139,6 +139,35 @@ void _ced_server_remove_finished_clients(ced_server_p server) {
 }
 
 /**
+ * @brief Accepts a new client connection in a non-blocking manner
+ * @param server The server to accept a client on
+ * @param timeout_secs The timeout in seconds
+ * @return The file descriptor of the new client, -1 on failure
+ */
+int _ced_server_accept(ced_server_p server, struct sockaddr_in address, int addr_len, int timeout_secs) {
+    struct timeval timeout;
+    timeout.tv_sec = timeout_secs;
+    timeout.tv_usec = 0;
+
+    fd_set read_fds;
+    FD_ZERO(&read_fds);
+    FD_SET(server->fd, &read_fds);
+
+    int ret = select(server->fd + 1, &read_fds, NULL, NULL, &timeout);
+
+    if (ret == -1) {
+        ced_log("Failed to select: %s\n", strerror(errno));
+        return CED_FAILURE;
+    }
+
+    if (ret == 0) {
+        return CED_FAILURE;
+    }
+
+    return accept(server->fd, (struct sockaddr*)&address, (socklen_t*)&addr_len);
+}
+
+/**
  * @brief The server loop
  * @param server The server to loop
  * @return 0 on success, -1 on failure
@@ -149,35 +178,34 @@ int _ced_server_loop(ced_server_p server) {
         struct sockaddr_in address;
         int addr_len = sizeof(address);
 
-        if ((new_socket = accept(server->fd, (struct sockaddr*)&address, (socklen_t*)&addr_len)) < 0) {
-            ced_log("Failed to accept: %s\n", strerror(errno));
-            return CED_FAILURE;
-        }
+        if ((new_socket = _ced_server_accept(server, address, addr_len, 1)) >= 0) {
 
-        ced_server_client_p client = ced_server_client_new(
-                new_socket,
-                inet_ntoa(address.sin_addr),
-                ntohs(address.sin_port)
-        );
+            ced_server_client_p client = ced_server_client_new(
+                    new_socket,
+                    inet_ntoa(address.sin_addr),
+                    ntohs(address.sin_port)
+            );
 
-        client->server = server;
+            client->server = server;
 
-        pthread_mutex_lock(&server->clients_mutex);
-        ced_list_append(server->clients, client);
-        pthread_mutex_unlock(&server->clients_mutex);
+            pthread_mutex_lock(&server->clients_mutex);
+            ced_list_append(server->clients, client);
+            pthread_mutex_unlock(&server->clients_mutex);
 
-        if (server->handler != NULL) {
-            if (pthread_create(
-                    &client->thread,
-                    NULL,
-                    (void *(*)(void *)) server->handler,
-                    client) != 0) {
-                ced_log("Failed to create thread for client %d\n", client->fd);
+            if (server->handler != NULL) {
+                if (pthread_create(
+                        &client->thread,
+                        NULL,
+                        (void *(*)(void *)) server->handler,
+                        client) != 0) {
+                    ced_log("Failed to create thread for client %d\n", client->fd);
+                }
+
+                pthread_detach(client->thread);
             }
-
-            pthread_detach(client->thread);
         }
 
+        // always perform any needed housekeeping
         _ced_server_remove_finished_clients(server);
     }
 }
