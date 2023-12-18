@@ -7,6 +7,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <pthread.h>
 
 #include "../defs.h"
 #include "../reflect.h"
@@ -24,7 +25,10 @@ typedef struct ced_server_client_t {
     int fd;                 /* The file descriptor of the client */
     char *host;             /* The host of the client */
     int port;               /* The port of the client */
+    int finished;           /* Determines whether or not the client is finished */
     ced_server_p server;    /* The server the client is connected to */
+
+    pthread_t thread;       /* The thread the client is running on */
 } ced_server_client_t, *ced_server_client_p;
 
 typedef void(*ced_server_handler)(ced_server_client_p client);
@@ -35,13 +39,14 @@ typedef void(*ced_server_handler)(ced_server_client_p client);
 typedef struct ced_server_t {
     CED_REFLECT_INFO
 
-    int fd;                     /* The file descriptor of the server */
-    char *host;                 /* The host to bind to */
-    int port;                   /* The port to bind to */
-    int running;                /* Whether or not the server is running */
+    int fd;                         /* The file descriptor of the server */
+    char *host;                     /* The host to bind to */
+    int port;                       /* The port to bind to */
+    int running;                    /* Whether or not the server is running */
 
-    ced_list_p clients;         /* The clients connected to the server */
-    ced_server_handler handler; /* Handler function for client connections */
+    ced_list_p clients;             /* The clients connected to the server */
+    ced_server_handler handler;     /* Handler function for client connections */
+    pthread_mutex_t clients_mutex;  /* Mutex for the clients list */
 } ced_server_t, *ced_server_p;
 
 /**

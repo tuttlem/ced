@@ -161,8 +161,6 @@ ced_buffer_p ced_buffer_new_handle(int handle, size_t _chunk_size) {
         }
     }
 
-    printf("Read %zd bytes\n", total_read);
-
     return buffer;
 }
 
