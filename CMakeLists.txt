@@ -17,6 +17,7 @@ add_library(ced
     src/util/log.c
     src/util/hash.c
     src/util/base64.c
+    src/util/event.c
     src/var/variant.c)
 
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)

@@ -12,6 +12,7 @@ ced_htable_p ced_htable_new() {
 
     htable->managed_data = 0;
     htable->buckets = ced_btree_new(ced_data_cmp_int32);
+    htable->keys = ced_list_new();
 
     return htable;
 }
@@ -50,6 +51,7 @@ void ced_htable_free(ced_htable_p htable) {
         ced_htable_node_free(htable->buckets->root);
     }
 
+    ced_list_free(htable->keys);
     ced_btree_free(htable->buckets);
     free(htable);
 }
@@ -76,6 +78,7 @@ void ced_htable_insert(ced_htable_p htable, char *key, void *value) {
     node->value = value;
 
     ced_btree_insert(htable->buckets, hash, node);
+    ced_list_append(htable->keys, key);
 }
 
 /**
@@ -114,6 +117,7 @@ void ced_htable_remove(ced_htable_p htable, char *key) {
 
     if (node != NULL) {
         ced_btree_remove(htable->buckets, &hash);
+        ced_list_remove(htable->keys, ced_data_cmp_str, key);
 
         if (hnode != NULL) {
             free(hnode->key); /* the string */

@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 
+#include "list.h"
 #include "btree.h"
 #include "../util/hash.h"
 
@@ -18,6 +19,7 @@ typedef struct ced_htable_node_t {
 typedef struct ced_htable_t {
     CED_REFLECT_INFO
 
+    ced_list_p keys;
     ced_btree_p buckets;
     int managed_data;
 } ced_htable_t, *ced_htable_p;

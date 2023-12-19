@@ -11,6 +11,7 @@ extern "C" {
 #include "./util/log.h"
 #include "./util/hash.h"
 #include "./util/base64.h"
+#include "./util/event.h"
 
 #include "./mem/buffer.h"
 

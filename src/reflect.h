@@ -18,6 +18,8 @@ typedef enum {
     reflect_type_buffer = 15,
     reflect_type_server = 16,
     reflect_type_server_client = 17,
+    reflect_type_event_table = 18,
+    reflect_type_event_slot = 19,
 } ced_reflect_type_t;
 
 typedef struct {
