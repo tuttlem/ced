@@ -330,7 +330,6 @@ int ced_server_stop(ced_server_p server) {
 
     ced_server_close_all_clients(server);
 
-
     server->running = 0;
 
     return CED_SUCCESS;

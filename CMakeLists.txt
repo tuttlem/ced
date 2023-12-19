@@ -14,6 +14,7 @@ add_library(ced
     src/cont/data_cmp.c
     src/cont/graph.c
     src/cont/htable.c
+    src/io/file.c
     src/util/log.c
     src/util/hash.c
     src/util/base64.c

@@ -22,6 +22,8 @@ extern "C" {
 #include "./cont/graph.h"
 #include "./cont/htable.h"
 
+#include "./io/file.h"
+
 #include "./var/variant.h"
 
 #include "./net/server.h"
