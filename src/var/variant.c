@@ -426,3 +426,62 @@ ced_var_p ced_var_as_type(ced_var_p var, ced_var_type_t type) {
 
     return new_var;
 }
+
+/**
+ * @brief Attempts to read data from a stream, and interpret it as a variant
+ * @param stream The stream to read from
+ * @return A pointer to the new variant
+ */
+ced_var_p ced_var_from_stream(FILE* stream) {
+    ced_var_p var = malloc(sizeof(ced_var_t));
+    fread(var, sizeof(ced_var_t), 1, stream);
+
+    switch (var->type) {
+        case ced_var_type_string:
+            var->data._string = malloc(var->size);
+            fread(var->data._string, var->size, 1, stream);
+            break;
+
+        case ced_var_type_pointer:
+            var->data._pointer = malloc(var->size);
+            fread(var->data._pointer, var->size, 1, stream);
+            break;
+
+        case ced_var_type_array:
+            var->data._array = malloc(sizeof(ced_var_p) * var->size);
+
+            for (size_t i = 0; i < var->size; ++i) {
+                var->data._array[i] = ced_var_from_stream(stream);
+            }
+
+            break;
+    }
+
+    return var;
+}
+
+/**
+ * @brief Writes a variant to a stream
+ * @param var The variant to write
+ * @param stream The stream to write to
+ */
+void ced_var_to_stream(ced_var_p var, FILE* stream) {
+    fwrite(var, sizeof(ced_var_t), 1, stream);
+
+    switch (var->type) {
+        case ced_var_type_string:
+            fwrite(var->data._string, var->size, 1, stream);
+            break;
+
+        case ced_var_type_pointer:
+            fwrite(var->data._pointer, var->size, 1, stream);
+            break;
+
+        case ced_var_type_array:
+            for (size_t i = 0; i < var->size; ++i) {
+                ced_var_to_stream(var->data._array[i], stream);
+            }
+
+            break;
+    }
+}

@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "../reflect.h"
 
@@ -206,5 +207,19 @@ ced_var_p ced_var_as_type(ced_var_p var, ced_var_type_t type);
 #define ced_var_as_ptr(var)    ced_var_as_type(var, ced_var_type_pointer)
 #define ced_var_as_array(var)  ced_var_as_type(var, ced_var_type_array)
 #define ced_var_as_dict(var)   ced_var_as_type(var, ced_var_type_dict)
+
+/**
+ * @brief Attempts to read data from a stream, and interpret it as a variant
+ * @param stream The stream to read from
+ * @return A pointer to the new variant
+ */
+ced_var_p ced_var_from_stream(FILE* stream);
+
+/**
+ * @brief Writes a variant to a stream
+ * @param var The variant to write
+ * @param stream The stream to write to
+ */
+void ced_var_to_stream(ced_var_p var, FILE* stream);
 
 #endif /* __ced_var_variant_h__ */
