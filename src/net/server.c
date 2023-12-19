@@ -29,7 +29,6 @@ ced_server_p ced_server_new(const char *host, int port, ced_server_handler handl
     server->port = port;
     server->running = 0;
     server->clients = ced_list_new();
-    server->clients->managed_data = 1;
     server->handler = handler;
     server->clients_mutex = (pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
 
@@ -131,6 +130,8 @@ void _ced_server_remove_finished_clients(ced_server_p server) {
 
     ced_list_foreach(client_node, clients_to_remove) {
         ced_server_client_p client = (ced_server_client_p) client_node->data;
+
+        ced_server_client_free(client);
         ced_list_remove(server->clients, NULL, client);
     }
 
@@ -302,6 +303,7 @@ int ced_server_close_all_clients(ced_server_p server) {
 
     ced_list_foreach(client_node, server->clients) {
         ced_server_client_p client = (ced_server_client_p)client_node->data;
+        client->finished = 1;
         close(client->fd);
     }
 
@@ -328,9 +330,6 @@ int ced_server_stop(ced_server_p server) {
 
     ced_server_close_all_clients(server);
 
-    pthread_mutex_lock(&server->clients_mutex);
-    ced_list_clear(server->clients);
-    pthread_mutex_unlock(&server->clients_mutex);
 
     server->running = 0;
 
